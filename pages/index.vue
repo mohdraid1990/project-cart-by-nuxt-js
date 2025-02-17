@@ -4,8 +4,12 @@
       <v-col cols="12" class="mb-6">
         <div class="d-flex flex-wrap align-center">
           <h1 class="text-h3 font-weight-black gradient-text mb-2">
-            {{ selectedCategory === 'all' ? 'All Products' : 
-               selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1) }}
+            {{
+              selectedCategory === "all"
+                ? "All Products"
+                : selectedCategory.charAt(0).toUpperCase() +
+                  selectedCategory.slice(1)
+            }}
           </h1>
           <v-chip
             color="secondary"
@@ -19,7 +23,7 @@
           Discover our amazing collection of products
         </p>
       </v-col>
-      
+
       <v-col
         v-for="(product, index) in filteredProducts"
         :key="product.id"
@@ -47,8 +51,15 @@
                 class="bg-grey-lighten-2 product-image"
               >
                 <template v-slot:placeholder>
-                  <v-row class="fill-height ma-0" align="center" justify="center">
-                    <v-progress-circular indeterminate color="primary"></v-progress-circular>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="primary"
+                    ></v-progress-circular>
                   </v-row>
                 </template>
               </v-img>
@@ -61,10 +72,15 @@
                   @click="$router.push('/product/' + product.id)"
                   class="overlay-btn mr-2"
                 >
-                  <v-tooltip activator="parent" location="top">View Details</v-tooltip>
-                  <v-icon><i class="mdi-information mdi v-icon notranslate v-theme--light v-icon--size-default" aria-hidden="true"></i></v-icon>
-                  
-
+                  <v-tooltip activator="parent" location="top"
+                    >View Details</v-tooltip
+                  >
+                  <v-icon
+                    ><i
+                      class="mdi-information mdi v-icon notranslate v-theme--light v-icon--size-default"
+                      aria-hidden="true"
+                    ></i
+                  ></v-icon>
                 </v-btn>
                 <v-btn
                   icon="mdi-cart-plus"
@@ -74,12 +90,16 @@
                   @click="addToCart(product)"
                   class="overlay-btn ml-2"
                 >
-                  <v-tooltip activator="parent" location="top">Add to Cart</v-tooltip>
+                  <v-tooltip activator="parent" location="top"
+                    >Add to Cart</v-tooltip
+                  >
                   <v-icon>mdi-cart</v-icon>
                 </v-btn>
               </div>
             </div>
-            <div class="product-badge" v-if="product.price < 50">Special Offer</div>
+            <div class="product-badge" v-if="product.price < 50">
+              Special Offer
+            </div>
           </div>
           <v-card-text class="product-content pa-6">
             <div class="d-flex flex-column h-100">
@@ -89,7 +109,9 @@
               <div class="product-title mb-2">
                 {{ product.title }}
               </div>
-              <div class="product-price mt-auto d-flex align-center justify-space-between">
+              <div
+                class="product-price mt-auto d-flex align-center justify-space-between"
+              >
                 <span class="price-tag">${{ product.price.toFixed(2) }}</span>
                 <v-btn
                   color="primary"
@@ -110,36 +132,36 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 const products = ref([]);
-const selectedCategory = inject('selectedCategory');
+const selectedCategory = inject("selectedCategory");
 
 const filteredProducts = computed(() => {
-  if (selectedCategory.value === 'all') return products.value;
-  return products.value.filter(p => p.category === selectedCategory.value);
+  if (selectedCategory.value === "all") return products.value;
+  return products.value.filter((p) => p.category === selectedCategory.value);
 });
 
 onMounted(async () => {
   try {
-    const response = await fetch('https://fakestoreapi.com/products');
+    const response = await fetch("https://fakestoreapi.com/products");
     products.value = await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error("Error fetching data:", error);
   }
 });
 
 function addToCart(product) {
-  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const cart = JSON.parse(localStorage.getItem("cart") || "[]");
   cart.push(product);
-  localStorage.setItem('cart', JSON.stringify(cart));
-  window.dispatchEvent(new Event('storage'));
+  localStorage.setItem("cart", JSON.stringify(cart));
+  window.dispatchEvent(new Event("storage"));
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .gradient-text {
   background: linear-gradient(135deg, #6366F1 0%, #EC4899 100%);
   -webkit-background-clip: text;
@@ -173,12 +195,12 @@ function addToCart(product) {
   border: 1px solid rgba(99, 102, 241, 0.1);
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   transform-origin: center bottom;
-}
 
-.product-card:hover {
-  transform: translateY(-12px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
-  border-color: #6366F1;
+  &:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
+    border-color: #6366F1;
+  }
 }
 
 .product-image-wrapper {
@@ -227,12 +249,14 @@ function addToCart(product) {
   animation: badgePulse 2s infinite;
 }
 
-.product-card:hover .product-overlay {
-  opacity: 1;
-}
+.product-card:hover {
+  .product-overlay {
+    opacity: 1;
+  }
 
-.product-card:hover .product-image {
-  transform: scale(1.15) rotate(2deg);
+  .product-image {
+    transform: scale(1.15) rotate(2deg);
+  }
 }
 
 .overlay-btn {
@@ -240,19 +264,21 @@ function addToCart(product) {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(4px);
   opacity: 0;
+
+  &:first-child {
+    transition-delay: 0.1s;
+  }
+
+  &:last-child {
+    transition-delay: 0.2s;
+  }
 }
 
-.product-card:hover .overlay-btn {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-.overlay-btn:first-child {
-  transition-delay: 0.1s;
-}
-
-.overlay-btn:last-child {
-  transition-delay: 0.2s;
+.product-card:hover {
+  .overlay-btn {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .product-content {
@@ -273,9 +299,11 @@ function addToCart(product) {
   transition: all 0.3s ease;
 }
 
-.product-card:hover .category-label {
-  background: rgba(99, 102, 241, 0.2);
-  transform: translateX(4px);
+.product-card:hover {
+  .category-label {
+    background: rgba(99, 102, 241, 0.2);
+    transform: translateX(4px);
+  }
 }
 
 .product-title {
@@ -291,8 +319,10 @@ function addToCart(product) {
   transition: color 0.3s ease;
 }
 
-.product-card:hover .product-title {
-  color: #6366F1;
+.product-card:hover {
+  .product-title {
+    color: #6366F1;
+  }
 }
 
 .price-tag {
@@ -311,9 +341,11 @@ function addToCart(product) {
   transition: all 0.3s ease;
 }
 
-.product-card:hover .buy-button {
-  transform: translateX(0);
-  opacity: 1;
+.product-card:hover {
+  .buy-button {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 @keyframes fadeInUp {
@@ -381,7 +413,7 @@ function addToCart(product) {
   }
 }
 
-/* Responsive Styles */
+// Responsive Styles
 @media (max-width: 600px) {
   .gradient-text {
     font-size: 2rem !important;
@@ -442,7 +474,7 @@ function addToCart(product) {
   }
 }
 
-/* Dark mode support */
+// Dark mode support
 @media (prefers-color-scheme: dark) {
   .product-card {
     background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
@@ -462,8 +494,10 @@ function addToCart(product) {
     background: rgba(99, 102, 241, 0.2);
   }
 
-  .product-card:hover .category-label {
-    background: rgba(99, 102, 241, 0.3);
+  .product-card:hover {
+    .category-label {
+      background: rgba(99, 102, 241, 0.3);
+    }
   }
 }
 </style>
